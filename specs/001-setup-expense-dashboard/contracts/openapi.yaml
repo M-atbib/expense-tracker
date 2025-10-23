@@ -1,0 +1,128 @@
+openapi: 3.1.0
+info:
+  title: Expense Tracker API (Future Firebase-backed)
+  version: 0.1.0
+  description: |
+    Stub contract describing the eventual persistence layer to be backed by Firebase.
+    Current release keeps data in-memory; endpoints return mocked responses until storage lands.
+servers:
+  - url: http://localhost:5173/api
+    description: Local dev mock handlers
+paths:
+  /transactions:
+    get:
+      summary: List transactions for the active user
+      description: Returns transactions filtered by optional date range; mock data while persistence is pending.
+      operationId: listTransactions
+      parameters:
+        - name: startDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionList'
+      x-implementation-status: mocked
+    post:
+      summary: Create a transaction
+      description: Accepts a transaction payload and returns the stored record; currently handled in-memory.
+      operationId: createTransaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+      x-implementation-status: mocked
+  /transactions/{id}:
+    delete:
+      summary: Remove a transaction
+      description: Deletes a transaction by id; stubbed until Firebase integration.
+      operationId: deleteTransaction
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Deleted
+      x-implementation-status: mocked
+components:
+  schemas:
+    Transaction:
+      type: object
+      required:
+        - id
+        - date
+        - label
+        - primaryCategory
+        - subCategory
+        - amount
+        - type
+      properties:
+        id:
+          type: string
+          format: uuid
+        date:
+          type: string
+          format: date
+        label:
+          type: string
+          maxLength: 80
+        primaryCategory:
+          type: string
+          enum: [income, fixed_expense, variable_expense]
+        subCategory:
+          type: string
+        amount:
+          type: number
+          minimum: 0
+        type:
+          type: string
+          enum: [income, expense]
+    TransactionInput:
+      allOf:
+        - $ref: '#/components/schemas/Transaction'
+        - type: object
+          properties:
+            id:
+              readOnly: true
+            type:
+              readOnly: true
+    TransactionList:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        meta:
+          type: object
+          properties:
+            total:
+              type: integer
+            startDate:
+              type: string
+            endDate:
+              type: string

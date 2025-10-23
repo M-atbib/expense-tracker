@@ -14,3 +14,10 @@ Automated testing is prohibited. Every change must include a documented manual w
 
 ## Dependency Discipline
 Keep the stack lean—prefer SvelteKit core APIs, Svelte `^5.39.5`, Tailwind CSS `^4.1.13`, and Vite `^7.1.7`. Any new dependency requires written justification tied to user value and approval during review, along with a plan for future removal if the dependency stops providing value. When feature work demands shared helpers, place them in `src/lib` instead of introducing new packages.
+
+## Active Technologies
+- SvelteKit `^2.43.2`, Svelte `^5.39.5`, TypeScript `^5.9.x` + Tailwind CSS `^4.1.13`, shadcn-svelte CLI, date-fns `^3.x`, Vite `^7.1.7` (001-setup-expense-dashboard)
+- In-memory Svelte store (clears on reload); structure ready for future Firebase persistence layer (001-setup-expense-dashboard)
+
+## Recent Changes
+- 001-setup-expense-dashboard: Added SvelteKit `^2.43.2`, Svelte `^5.39.5`, TypeScript `^5.9.x` + Tailwind CSS `^4.1.13`, shadcn-svelte CLI, date-fns `^3.x`, Vite `^7.1.7`
