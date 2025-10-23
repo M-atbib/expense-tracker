@@ -18,7 +18,7 @@ As a budget-conscious user, I want to record a new income or expense with one fo
 
 **Why this priority**: Without quick entry the tool delivers no value; this story underpins the rest of the page.
 
-**Manual Validation**: On desktop (1440px) and mobile (375px) viewports, open the page, confirm the form loads with dark background and light text, complete required fields (date defaults to today, positive amount, label, category, subcategory) and submit. Verify success confirmation and that the form resets for the next entry.
+**Manual Validation**: On desktop (1440px) and mobile (375px) viewports, open the page, confirm the form loads with dark background and light text, complete required fields (date defaults to today, positive amount, label, category, subcategory) and submit. Verify success confirmation and that the form resets for the next entry (data lasts only while the page is open).
 
 **Acceptance Scenarios**:
 
@@ -69,7 +69,7 @@ As a user tracking financial health, I want to view end-of-period balance, saved
 
 - **FR-001**: The transaction form MUST collect date (default today, editable), amount (positive currency with two decimals), label (free text up to 80 characters), primary category (Income, Fixed Expense, Variable Expense), and a subcategory constrained to the chosen category.
 - **FR-002**: Subcategory menus MUST provide: Income → Salary, Freelance, Other; Fixed Expense → Rent/Mortgage, Utilities, Subscriptions; Variable Expense → Groceries, Dining Out, Travel/Leisure. The UX MUST allow adding new subcategories in future without redesign.
-- **FR-003**: On submission, the system MUST append the new entry to the current session's records, surface it in the entries table sorted by date (newest first), and clear the form while confirming success inline.
+- **FR-003**: On submission, the system MUST append the new entry to the in-memory demo dataset (cleared when the page reloads), surface it in the entries table sorted by date (newest first), and clear the form while confirming success inline.
 - **FR-004**: The entries table MUST support period filters with presets (This Month, Last Month, Year to Date) and a custom date range picker, updating rows, totals, and chart inputs instantly.
 - **FR-005**: Each table row MUST show date, label, primary category, subcategory, amount (positive values green for income, negative red for expenses), and persist manual filters during navigation within the page.
 - **FR-006**: KPI cards MUST present total income, total expenses, end-of-period leftover balance (income minus expenses), and amount saved (target savings minus total expenses when a savings target is provided, otherwise default to income minus expenses). Card copy MUST clarify which calculation is displayed.
@@ -96,4 +96,10 @@ As a user tracking financial health, I want to view end-of-period balance, saved
 
 - "End of period let sold" is interpreted as the leftover balance at the end of the selected period (income minus expenses).
 - Savings targets are optional; when absent, amount saved equals leftover balance.
-- Data persists in-browser for the initial version; backend storage will be addressed in future iterations if required.
+- Data does not persist after a page reload in this version; durable storage will be addressed in future iterations when backend work is prioritized.
+
+## Clarifications
+
+### Session 2025-10-23
+
+- Q: How should recorded transactions be stored between visits? → A: Treat entries as demo data with no persistence beyond the current page session.
