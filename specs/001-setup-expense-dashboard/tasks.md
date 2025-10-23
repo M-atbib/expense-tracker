@@ -80,6 +80,7 @@ description: "Task list template for feature implementation"
 - [ ] T017 [US2] Implement `EntriesTable.svelte` in `src/lib/components/table/` with responsive styling and category badges
 - [ ] T018 [US2] Integrate the filter + table stack into `src/routes/+page.svelte`
 - [ ] T019 [US2] Capture tablet/mobile filter walkthrough notes in `docs/manual-validation.md`
+- [ ] T020 [US2] Implement edge-case handling (future-date confirmation, zero-amount rejection, empty-state messaging, rapid category switch reset) in `src/lib/components/` and document outcomes in `docs/manual-validation.md`
 
 **Checkpoint**: User Story 2 integrates cleanly and passes manual validation
 
