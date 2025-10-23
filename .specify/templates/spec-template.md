@@ -5,19 +5,18 @@
 **Status**: Draft  
 **Input**: User description: "$ARGUMENTS"
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Manual Validation *(mandatory)*
 
 <!--
-  IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
-  Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
-  you should still have a viable MVP (Minimum Viable Product) that delivers value.
-  
-  Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
-  Think of each story as a standalone slice of functionality that can be:
-  - Developed independently
-  - Tested independently
-  - Deployed independently
-  - Demonstrated to users independently
+  IMPORTANT: Prioritize user journeys in order of value. Each story must remain
+  independently releasable and manually verifiable. Deliver the smallest slice
+  that provides real benefit while honoring clean code, simple UX, responsive
+  design, and minimal dependencies.
+
+  Assign priorities (P1, P2, P3, etc.) where P1 is critical. For every story,
+  capture the manual walkthrough steps reviewers will follow instead of
+  automated tests. Document any responsive behaviors or accessibility details
+  that must be checked on multiple viewports.
 -->
 
 ### User Story 1 - [Brief Title] (Priority: P1)
@@ -26,7 +25,7 @@
 
 **Why this priority**: [Explain the value and why it has this priority level]
 
-**Independent Test**: [Describe how this can be tested independently - e.g., "Can be fully tested by [specific action] and delivers [specific value]"]
+**Manual Validation**: [Describe the manual walkthrough including viewport/device coverage and acceptance cues]
 
 **Acceptance Scenarios**:
 
@@ -41,7 +40,7 @@
 
 **Why this priority**: [Explain the value and why it has this priority level]
 
-**Independent Test**: [Describe how this can be tested independently]
+**Manual Validation**: [Describe the manual walkthrough]
 
 **Acceptance Scenarios**:
 
@@ -55,7 +54,7 @@
 
 **Why this priority**: [Explain the value and why it has this priority level]
 
-**Independent Test**: [Describe how this can be tested independently]
+**Manual Validation**: [Describe the manual walkthrough]
 
 **Acceptance Scenarios**:
 
@@ -68,32 +67,34 @@
 ### Edge Cases
 
 <!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right edge cases.
+  ACTION REQUIRED: Document boundary conditions, offline scenarios, and
+  responsive layout quirks that require manual attention.
 -->
 
 - What happens when [boundary condition]?
 - How does system handle [error scenario]?
+- How does the layout respond at [specific viewport]?
 
 ## Requirements *(mandatory)*
 
 <!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right functional requirements.
+  ACTION REQUIRED: Fill these out with the concrete functional requirements.
+  Highlight constraints that protect clean code, simple UX, responsive design,
+  and minimal dependency footprint.
 -->
 
 ### Functional Requirements
 
-- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
-- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]  
-- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
-- **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
-- **FR-005**: System MUST [behavior, e.g., "log all security events"]
+- **FR-001**: System MUST [specific capability, e.g., "allow users to log expenses"]
+- **FR-002**: Interface MUST remain usable on [viewport/device] without additional dependencies
+- **FR-003**: Users MUST be able to [key interaction, e.g., "filter expenses by category"]
+- **FR-004**: System MUST [data requirement, e.g., "persist expense entries"]
+- **FR-005**: Styling MUST leverage Tailwind utilities; custom CSS requires justification
 
 *Example of marking unclear requirements:*
 
-- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+- **FR-006**: System MUST integrate with [NEEDS CLARIFICATION: external API not specified]
+- **FR-007**: Layout MUST adapt to [NEEDS CLARIFICATION: breakpoint or device unknown]
 
 ### Key Entities *(include if feature involves data)*
 
@@ -103,13 +104,13 @@
 ## Success Criteria *(mandatory)*
 
 <!--
-  ACTION REQUIRED: Define measurable success criteria.
-  These must be technology-agnostic and measurable.
+  ACTION REQUIRED: Define measurable, technology-agnostic outcomes that can be
+  confirmed through manual review or analytics.
 -->
 
 ### Measurable Outcomes
 
-- **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under 2 minutes"]
-- **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
-- **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
-- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+- **SC-001**: [Manual metric, e.g., "Reviewer completes primary flow in < 2 minutes"]
+- **SC-002**: [Responsive metric, e.g., "Layout maintains readability at 320px"]
+- **SC-003**: [Simplicity metric, e.g., "<3 user actions to record an expense"]
+- **SC-004**: [Business metric, e.g., "Increase weekly active users by 10%"]

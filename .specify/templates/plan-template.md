@@ -17,21 +17,25 @@
   the iteration process.
 -->
 
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [single/web/mobile - determines source structure]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Language/Version**: SvelteKit `^2.43.2`, Svelte `^5.39.5`, TypeScript `^5.9.x` (update if deviating)  
+**Primary Dependencies**: Tailwind CSS `^4.1.13`, Vite `^7.1.7`, [NEEDS CLARIFICATION for feature-specific additions]  
+**Storage**: [e.g., browser storage, third-party API, or N/A]  
+**Verification**: Manual walkthroughs only (automated tests prohibited by constitution)  
+**Target Platform**: Responsive web (320px mobile through desktop)  
+**Project Type**: Single SvelteKit application  
+**Performance Goals**: [domain-specific KPI or NEEDS CLARIFICATION]  
+**Constraints**: Maintain minimal dependencies, clean code, and responsive UX [add feature-specific limits]  
+**Scale/Scope**: [domain-specific, e.g., number of screens, datasets, or NEEDS CLARIFICATION]
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- **Clean Code & Readability**: [Outline refactors, lint/format coverage, and dead-code removals required].
+- **Simple UX Flows**: [Describe the core journey and how complexity stays minimal].
+- **Responsive Across Viewports**: [List devices/breakpoints for manual validation and responsive considerations].
+- **Minimal Dependency Footprint**: [Document any new dependency proposals with justification or state "None"].
+- **Manual Confidence Over Automation**: [Detail the manual walkthrough steps; confirm no automated tests are planned].
 
 ## Project Structure
 
@@ -48,51 +52,31 @@ specs/[###-feature]/
 ```
 
 ### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
+<!-- Provide the concrete SvelteKit structure for this feature. Update the tree with real folders/files. -->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
 src/
-├── models/
-├── services/
-├── cli/
-└── lib/
-
-tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
+├── lib/
 │   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
+│   ├── stores/
+│   └── utils/
+├── routes/
+│   ├── +layout.svelte
+│   └── [feature]/
+│       ├── +page.svelte
+│       └── +page.ts
+└── app.d.ts
 
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
+static/
+├── favicon.png
+└── [feature-assets]/
 
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+svelte.config.js
+tailwind.config.ts
+vite.config.ts
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: [Document the selected structure and reference the real directories captured above]
 
 ## Complexity Tracking
 

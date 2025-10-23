@@ -1,50 +1,74 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+Version change: n/a → 1.0.0
+Modified principles: Clean Code & Readability; Simple UX Flows; Responsive Across Viewports; Minimal Dependency Footprint; Manual Confidence Over Automation
+Added sections: Implementation Constraints; Workflow Expectations
+Removed sections: None
+Templates requiring updates: ✅ .specify/templates/plan-template.md; ✅ .specify/templates/spec-template.md; ✅ .specify/templates/tasks-template.md; ✅ AGENTS.md
+Follow-up TODOs: None
+-->
+
+# Expense Tracker Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### Clean Code & Readability
+We ship Svelte and TypeScript that is self-explanatory, modular, and lint-clean. Every change MUST
+leave files clearer than before—prefer extracting helpers into `src/lib` over adding inline
+complexity, keep functions short, and delete dead code immediately. This keeps the codebase easy to
+review and safe for rapid manual verification.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### Simple UX Flows
+User journeys MUST be obvious on first use: one action per screen, minimal configuration, and clear
+copy. Favor defaults that work out of the box and remove toggles or options that introduce friction.
+Delivering a focused experience accelerates decision-making and prevents regressions when we iterate
+quickly by hand.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### Responsive Across Viewports
+Every UI must adapt seamlessly from mobile (min 320px) through widescreen layouts. Implement with
+Tailwind utility classes, flex/grid primitives, and semantic markup so we avoid custom CSS bloat.
+Consistent responsiveness ensures the tracker remains usable during manual QA on any device.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### Minimal Dependency Footprint
+Default to built-in SvelteKit, Svelte `^5.39.5`, and Tailwind CSS `^4.1.13`. Any extra dependency
+MUST have a written justification tied to user value and be tracked for removal when no longer
+essential. A lean stack keeps bundle size predictable and simplifies long-term maintenance.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### Manual Confidence Over Automation
+Automated tests are prohibited. We rely on linting, TypeScript checks, and deliberate manual
+walkthroughs to validate behavior. Document manual verification steps with each change so reviewers
+can reproduce results quickly. This focus keeps the team aligned on human-centric quality gates.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Implementation Constraints
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+- Framework versions are locked to the repository `package.json`: SvelteKit `^2.43.2`, Svelte
+  `^5.39.5`, Tailwind CSS `^4.1.13`, and Vite `^7.1.7`. Upgrades require a governance amendment.
+- Styling defaults to Tailwind utilities and component-scoped styles; introduce custom CSS files only
+  when Tailwind cannot express the need succinctly.
+- Persist shared utilities in `src/lib` and keep route files focused on data orchestration plus
+  presentation.
+- New tooling, plugins, or build steps must not add automated testing capabilities.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Workflow Expectations
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+- Start every feature with a lightweight plan identifying the minimal UX slice and manual validation
+  steps.
+- Run `pnpm lint`, `pnpm format`, and `pnpm check` before requesting review; these are the only
+  mandatory gates.
+- Record manual walkthrough notes (screenshots, bullet steps) in PR descriptions to create a living
+  QA log.
+- Prioritize accessibility basics (semantic HTML, focus management) during manual checks to support
+  simple UX and responsive design.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+- This constitution supersedes conflicting guidance in templates or docs. Amendments require consensus
+  during review and documentation of rationale in the PR description.
+- Versioning follows semantic rules: bump MAJOR for principle changes that relax or contradict prior
+  mandates; MINOR for new principles or sections; PATCH for clarifications.
+- The maintainer on call records the amendment date and version in this file and updates all related
+  templates the same day.
+- Compliance is reviewed at plan time using the Constitution Check gate and again during code review;
+  deviations require an explicit follow-up task with owner and due date.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-10-23 | **Last Amended**: 2025-10-23
