@@ -1,6 +1,5 @@
 ---
-
-description: "Task list template for feature implementation"
+description: 'Task list template for feature implementation'
 ---
 
 # Tasks: Expense Tracker Launch Page
@@ -28,11 +27,11 @@ description: "Task list template for feature implementation"
 
 **Purpose**: Align project structure, deps, and tooling before story work
 
-- [ ] T001 Update `package.json` to add the `date-fns` dependency required by the plan
-- [ ] T002 Scaffold shadcn-svelte configuration in `components.json` and wire CLI scripts in `package.json`
-- [ ] T003 Create dark-mode theme tokens in `src/app.postcss` using `@theme` variables
-- [ ] T004 Extend `tailwind.config.ts` to consume `@theme` tokens and register shadcn presets
-- [ ] T005 Create `docs/manual-validation.md` with sections for US1–US3 walkthrough notes
+- [x] T001 Update `package.json` to add the `date-fns` dependency required by the plan
+- [x] T002 Scaffold shadcn-svelte configuration in `components.json` and wire CLI scripts in `package.json`
+- [x] T003 Create dark-mode theme tokens in `src/app.postcss` using `@theme` variables
+- [x] T004 Extend `tailwind.config.ts` to consume `@theme` tokens and register shadcn presets
+- [x] T005 Create `docs/manual-validation.md` with sections for US1–US3 walkthrough notes
 
 ---
 
@@ -40,11 +39,11 @@ description: "Task list template for feature implementation"
 
 **Purpose**: Core infrastructure that MUST be complete before any user story work
 
-- [ ] T006 Define shared finance types in `src/lib/types.ts`
-- [ ] T007 Implement date range helpers in `src/lib/utils/filters.ts`
-- [ ] T008 Add theme utilities (CSS variable getters) in `src/lib/utils/theme.ts`
-- [ ] T009 Build the in-memory transaction store in `src/lib/stores/transactions.ts`
-- [ ] T010 Configure global layout styling and imports in `src/routes/+layout.svelte`
+- [x] T006 Define shared finance types in `src/lib/types.ts`
+- [x] T007 Implement date range helpers in `src/lib/utils/filters.ts`
+- [x] T008 Add theme utilities (CSS variable getters) in `src/lib/utils/theme.ts`
+- [x] T009 Build the in-memory transaction store in `src/lib/stores/transactions.ts`
+- [x] T010 Configure global layout styling and imports in `src/routes/+layout.svelte`
 
 **Checkpoint**: Foundation ready – user story implementation can begin
 
@@ -58,10 +57,10 @@ description: "Task list template for feature implementation"
 
 ### Implementation for User Story 1
 
-- [ ] T011 [US1] Create `TransactionForm.svelte` in `src/lib/components/form/` using shadcn form primitives
-- [ ] T012 [US1] Wire form validation and store submission logic in `src/lib/components/form/TransactionForm.svelte`
-- [ ] T013 [US1] Compose the form section and confirmation messaging in `src/routes/+page.svelte`
-- [ ] T014 [US1] Record desktop/mobile walkthrough results in `docs/manual-validation.md`
+- [x] T011 [US1] Create `TransactionForm.svelte` in `src/lib/components/form/` using shadcn form primitives
+- [x] T012 [US1] Wire form validation and store submission logic in `src/lib/components/form/TransactionForm.svelte`
+- [x] T013 [US1] Compose the form section and confirmation messaging in `src/routes/+page.svelte`
+- [x] T014 [US1] Record desktop/mobile walkthrough results in `docs/manual-validation.md`
 
 **Checkpoint**: User Story 1 delivers value and is manually verified across required viewports
 
@@ -75,12 +74,12 @@ description: "Task list template for feature implementation"
 
 ### Implementation for User Story 2
 
-- [ ] T015 [US2] Build `PeriodFilter.svelte` in `src/lib/components/table/` with presets and custom range controls
-- [ ] T016 [US2] Extend `src/lib/stores/transactions.ts` with filtering state and derived `filteredEntries`
-- [ ] T017 [US2] Implement `EntriesTable.svelte` in `src/lib/components/table/` with responsive styling and category badges
-- [ ] T018 [US2] Integrate the filter + table stack into `src/routes/+page.svelte`
-- [ ] T019 [US2] Capture tablet/mobile filter walkthrough notes in `docs/manual-validation.md`
-- [ ] T020 [US2] Implement edge-case handling (future-date confirmation, zero-amount rejection, empty-state messaging, rapid category switch reset) in `src/lib/components/` and document outcomes in `docs/manual-validation.md`
+- [x] T015 [US2] Build `PeriodFilter.svelte` in `src/lib/components/table/` with presets and custom range controls
+- [x] T016 [US2] Extend `src/lib/stores/transactions.ts` with filtering state and derived `filteredEntries`
+- [x] T017 [US2] Implement `EntriesTable.svelte` in `src/lib/components/table/` with responsive styling and category badges
+- [x] T018 [US2] Integrate the filter + table stack into `src/routes/+page.svelte`
+- [x] T019 [US2] Capture tablet/mobile filter walkthrough notes in `docs/manual-validation.md`
+- [x] T020 [US2] Implement edge-case handling (future-date confirmation, zero-amount rejection, empty-state messaging, rapid category switch reset) in `src/lib/components/` and document outcomes in `docs/manual-validation.md`
 
 **Checkpoint**: User Story 2 integrates cleanly and passes manual validation
 
@@ -94,12 +93,12 @@ description: "Task list template for feature implementation"
 
 ### Implementation for User Story 3
 
-- [ ] T020 [US3] Add KPI aggregations and chart-ready datasets to `src/lib/stores/transactions.ts`
-- [ ] T021 [US3] Create `KpiCard.svelte` in `src/lib/components/kpi/` with dark-mode styles
-- [ ] T022 [US3] Implement `TrendChart.svelte` in `src/lib/components/charts/` using SVG and theme tokens
-- [ ] T023 [US3] Implement `CategoryDonut.svelte` in `src/lib/components/charts/` with accessible legends
-- [ ] T024 [US3] Assemble the KPI and charts section in `src/routes/+page.svelte`
-- [ ] T025 [US3] Document KPI/chart validation outcomes in `docs/manual-validation.md`
+- [x] T020 [US3] Add KPI aggregations and chart-ready datasets to `src/lib/stores/transactions.ts`
+- [x] T021 [US3] Create `KpiCard.svelte` in `src/lib/components/kpi/` with dark-mode styles
+- [x] T022 [US3] Implement `TrendChart.svelte` in `src/lib/components/charts/` using SVG and theme tokens
+- [x] T023 [US3] Implement `CategoryDonut.svelte` in `src/lib/components/charts/` with accessible legends
+- [x] T024 [US3] Assemble the KPI and charts section in `src/routes/+page.svelte`
+- [x] T025 [US3] Document KPI/chart validation outcomes in `docs/manual-validation.md`
 
 **Checkpoint**: User Story 3 completes the feature set with documented manual validation
 
@@ -109,9 +108,9 @@ description: "Task list template for feature implementation"
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T026 Ensure form and chart components expose ARIA labels and keyboard interactions in `src/lib/components/`
-- [ ] T027 Refresh onboarding instructions with final steps in `specs/001-setup-expense-dashboard/quickstart.md`
-- [ ] T028 Update project screenshots or placeholder image in `static/images/dashboard-placeholder.png`
+- [x] T026 Ensure form and chart components expose ARIA labels and keyboard interactions in `src/lib/components/`
+- [x] T027 Refresh onboarding instructions with final steps in `specs/001-setup-expense-dashboard/quickstart.md`
+- [x] T028 Update project screenshots or placeholder image in `static/images/dashboard-placeholder.png`
 
 ---
 

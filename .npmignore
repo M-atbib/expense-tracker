@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+pnpm-lock.yaml
+pnpm-workspace.yaml
+
+# Local tooling
+.codex/
+.specify/
+.vscode/
+.github/
+
+# Build cache
+.svelte-kit/
+
+# Project assets and docs not needed for package tarball
+specs/
+docs/
+static/
