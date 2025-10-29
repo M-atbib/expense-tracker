@@ -10,7 +10,7 @@
 	<meta name="theme-color" content="#070b14" />
 </svelte:head>
 
-<main class="bg-surface text-text-primary min-h-screen antialiased">
+<main class="min-h-screen bg-surface text-text-primary antialiased">
 	<div class="relative isolate min-h-screen">
 		{@render children?.()}
 	</div>

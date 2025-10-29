@@ -1,3 +1,5 @@
+<svelte:options runes={true} />
+
 <script lang="ts">
 	import { tick } from 'svelte';
 	import { formatISO, isAfter, parseISO } from 'date-fns';
@@ -25,34 +27,23 @@
 		amount: ''
 	});
 
-	let form = emptyForm();
-	let errors: FormErrors = {};
-	let showSuccess = false;
-	let subcategoryOptions: string[] = [];
+	let form = $state<FormState>(emptyForm());
+	let errors = $state<FormErrors>({});
+	let showSuccess = $state(false);
+	let subcategoryOptions = $state<string[]>([]);
 
-	const syncSubcategories = (category: PrimaryCategory = form.primaryCategory) => {
-		const options = transactionsStore.getSubcategories(category);
-		subcategoryOptions = options;
-
+	$effect(() => {
+		const options = transactionsStore.getSubcategories(form.primaryCategory);
 		const fallback = options[0] ?? '';
+
+		subcategoryOptions = [...options];
+
 		if (options.length === 0 && form.subCategory !== '') {
 			form = { ...form, subCategory: '' };
 		} else if (options.length > 0 && !options.includes(form.subCategory)) {
 			form = { ...form, subCategory: fallback };
 		}
-	};
-
-	syncSubcategories();
-
-	const handlePrimaryCategoryChange = (event: Event) => {
-		const target = event.currentTarget as HTMLSelectElement;
-		const value = target.value as PrimaryCategory;
-
-		if (form.primaryCategory === value) return;
-
-		form = { ...form, primaryCategory: value };
-		syncSubcategories(value);
-	};
+	});
 
 	const validate = (): boolean => {
 		const next: FormErrors = {};
@@ -87,7 +78,6 @@
 
 	const resetForm = async () => {
 		form = emptyForm();
-		syncSubcategories();
 		await tick();
 		errors = {};
 	};
@@ -115,89 +105,88 @@
 </script>
 
 <form
-	on:submit={handleSubmit}
-	class="rounded-card bg-surface-elevated shadow-elevated ring-border relative flex flex-col gap-6 p-6 ring-1"
+	onsubmit={handleSubmit}
+	class="relative flex flex-col gap-6 rounded-card bg-surface-elevated p-6 shadow-elevated ring-1 ring-border"
 >
 	<header class="flex flex-col gap-2">
-		<h2 class="text-text-secondary text-lg font-semibold">Add a transaction</h2>
-		<p class="text-text-muted text-sm">
+		<h2 class="text-lg font-semibold text-text-secondary">Add a transaction</h2>
+		<p class="text-sm text-text-muted">
 			Track your income and spending in one place. Transactions save locally and reset on refresh.
 		</p>
 	</header>
 
 	<div class="grid gap-4 sm:grid-cols-2">
 		<div class="flex flex-col gap-2">
-			<label class="text-text-secondary text-sm font-medium" for="date">Date</label>
+			<label class="text-sm font-medium text-text-secondary" for="date">Date</label>
 			<input
 				id="date"
 				type="date"
 				bind:value={form.date}
 				max={today}
 				required
-				class="border-border bg-surface text-text-primary focus-visible:ring-accent focus-visible:ring-offset-surface-elevated h-11 rounded-lg border px-3 text-sm transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+				class="h-11 rounded-lg border border-border bg-surface px-3 text-sm text-text-primary transition outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-elevated"
 			/>
 			{#if errors.date}
-				<p class="text-negative text-xs">{errors.date}</p>
+				<p class="text-xs text-negative">{errors.date}</p>
 			{/if}
 		</div>
 
 		<div class="flex flex-col gap-2 sm:col-span-2">
-			<label class="text-text-secondary text-sm font-medium" for="label">Description</label>
+			<label class="text-sm font-medium text-text-secondary" for="label">Description</label>
 			<input
 				id="label"
 				placeholder="e.g. Coffee with client"
 				maxlength={80}
 				bind:value={form.label}
 				required
-				class="border-border bg-surface text-text-primary focus-visible:ring-accent focus-visible:ring-offset-surface-elevated h-11 rounded-lg border px-3 text-sm transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+				class="h-11 rounded-lg border border-border bg-surface px-3 text-sm text-text-primary transition outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-elevated"
 			/>
 			{#if errors.label}
-				<p class="text-negative text-xs">{errors.label}</p>
+				<p class="text-xs text-negative">{errors.label}</p>
 			{:else}
-				<p class="text-text-muted text-xs">Keep it short—this appears in your entries table.</p>
+				<p class="text-xs text-text-muted">Keep it short—this appears in your entries table.</p>
 			{/if}
 		</div>
 
 		<div class="flex flex-col gap-2">
-			<label class="text-text-secondary text-sm font-medium" for="primaryCategory">Category</label>
+			<label class="text-sm font-medium text-text-secondary" for="primaryCategory">Category</label>
 			<select
 				id="primaryCategory"
-				value={form.primaryCategory}
-				class="border-border bg-surface text-text-primary focus-visible:ring-accent focus-visible:ring-offset-surface-elevated h-11 rounded-lg border px-3 text-sm transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
-				on:change={handlePrimaryCategoryChange}
+				bind:value={form.primaryCategory}
+				class="h-11 rounded-lg border border-border bg-surface px-3 text-sm text-text-primary transition outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-elevated"
 			>
-				{#each PRIMARY_CATEGORIES as category}
+				{#each PRIMARY_CATEGORIES as category (category)}
 					<option value={category}>{CATEGORY_LABELS[category]}</option>
 				{/each}
 			</select>
 		</div>
 
 		<div class="flex flex-col gap-2">
-			<label class="text-text-secondary text-sm font-medium" for="subCategory">Subcategory</label>
+			<label class="text-sm font-medium text-text-secondary" for="subCategory">Subcategory</label>
 			<select
 				id="subCategory"
 				bind:value={form.subCategory}
-				class="border-border bg-surface text-text-primary focus-visible:ring-accent focus-visible:ring-offset-surface-elevated h-11 rounded-lg border px-3 text-sm transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-40"
+				class="h-11 rounded-lg border border-border bg-surface px-3 text-sm text-text-primary transition outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-elevated disabled:opacity-40"
 				disabled={subcategoryOptions.length === 0}
 			>
 				{#if subcategoryOptions.length === 0}
 					<option value="">Add categories later</option>
 				{:else}
-					{#each subcategoryOptions as option}
+					{#each subcategoryOptions as option (option)}
 						<option value={option}>{option}</option>
 					{/each}
 				{/if}
 			</select>
 			{#if errors.subCategory}
-				<p class="text-negative text-xs">{errors.subCategory}</p>
+				<p class="text-xs text-negative">{errors.subCategory}</p>
 			{/if}
 		</div>
 
 		<div class="flex flex-col gap-2 sm:col-span-2">
-			<label class="text-text-secondary text-sm font-medium" for="amount">Amount</label>
+			<label class="text-sm font-medium text-text-secondary" for="amount">Amount</label>
 			<div class="relative">
 				<span
-					class="text-text-muted pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm"
+					class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm text-text-muted"
 					>$</span
 				>
 				<input
@@ -207,11 +196,11 @@
 					min="0"
 					bind:value={form.amount}
 					required
-					class="border-border bg-surface text-text-primary focus-visible:ring-accent focus-visible:ring-offset-surface-elevated h-11 w-full rounded-lg border pr-3 pl-8 text-sm transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+					class="h-11 w-full rounded-lg border border-border bg-surface pr-3 pl-8 text-sm text-text-primary transition outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-elevated"
 				/>
 			</div>
 			{#if errors.amount}
-				<p class="text-negative text-xs">{errors.amount}</p>
+				<p class="text-xs text-negative">{errors.amount}</p>
 			{/if}
 		</div>
 	</div>
@@ -219,13 +208,13 @@
 	<div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 		<button
 			type="submit"
-			class="bg-accent text-surface hover:bg-accent-soft focus-visible:ring-accent focus-visible:ring-offset-surface-elevated inline-flex h-11 items-center justify-center gap-2 rounded-lg px-5 text-sm font-semibold transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+			class="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-accent px-5 text-sm font-semibold text-surface transition hover:bg-accent-soft focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-elevated focus-visible:outline-none"
 		>
 			Add transaction
 		</button>
 
 		{#if showSuccess}
-			<p role="status" aria-live="polite" class="text-positive text-sm font-medium">
+			<p role="status" aria-live="polite" class="text-sm font-medium text-positive">
 				Transaction added
 			</p>
 		{/if}

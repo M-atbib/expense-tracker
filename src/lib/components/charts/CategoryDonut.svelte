@@ -1,10 +1,17 @@
+<svelte:options runes={true} />
+
 <script lang="ts">
 	import type { CategoryShareSlice } from '$lib/types';
 	import { formatCurrency } from '$lib/utils/format';
 	import { themeColor } from '$lib/utils/theme';
 
-	export let title = 'Category share';
-	export let data: CategoryShareSlice[] = [];
+	let {
+		title = 'Category share',
+		data = []
+	}: {
+		title?: string;
+		data?: CategoryShareSlice[];
+	} = $props<{ title?: string; data?: CategoryShareSlice[] }>();
 
 	const radius = 88;
 	const center = 120;
@@ -32,7 +39,7 @@
 
 	const arcs = () => {
 		let currentAngle = -Math.PI / 2;
-		return data.map((slice, index) => {
+		return data.map((slice: CategoryShareSlice, index: number) => {
 			const angle = (slice.percentage / 100) * Math.PI * 2;
 			const start = currentAngle;
 			const end = currentAngle + angle;
@@ -48,26 +55,31 @@
 		});
 	};
 
-	$: arcSegments = arcs();
-	$: totalPercentage = data.reduce((sum, slice) => sum + slice.percentage, 0);
+	const arcSegments = $derived(arcs());
+	const totalPercentage = $derived(
+		data.reduce((sum: number, slice: CategoryShareSlice) => sum + slice.percentage, 0)
+	);
+	const totalValue = $derived(
+		data.reduce((sum: number, slice: CategoryShareSlice) => sum + slice.value, 0)
+	);
 </script>
 
 <section
-	class="rounded-card border-border bg-surface-elevated shadow-elevated flex flex-col gap-5 border p-6"
+	class="flex flex-col gap-5 rounded-card border border-border bg-surface-elevated p-6 shadow-elevated"
 >
 	<header class="flex items-center justify-between">
 		<div class="flex flex-col gap-1">
-			<h3 class="text-text-secondary text-lg font-semibold">{title}</h3>
-			<p class="text-text-muted text-sm">Breakdown of spending by category.</p>
+			<h3 class="text-lg font-semibold text-text-secondary">{title}</h3>
+			<p class="text-sm text-text-muted">Breakdown of spending by category.</p>
 		</div>
-		<span class="text-text-muted text-xs tracking-wide uppercase">
+		<span class="text-xs tracking-wide text-text-muted uppercase">
 			{Math.round(totalPercentage)}%
 		</span>
 	</header>
 
 	{#if data.length === 0}
 		<div
-			class="border-border-muted bg-surface-inset/60 text-text-muted flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed py-12 text-center"
+			class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border-muted bg-surface-inset/60 py-12 text-center text-text-muted"
 		>
 			<p class="text-sm">Add expense entries to visualize category share.</p>
 		</div>
@@ -91,7 +103,7 @@
 						opacity="0.35"
 					/>
 
-					{#each arcSegments as segment}
+					{#each arcSegments as segment, index (`${segment.category}-${index}`)}
 						<g>
 							<path
 								d={segment.path}
@@ -121,15 +133,15 @@
 						text-anchor="middle"
 						class="fill-[var(--color-text-muted)] text-sm"
 					>
-						{formatCurrency(data.reduce((sum, slice) => sum + slice.value, 0))}
+						{formatCurrency(totalValue)}
 					</text>
 				</svg>
 			</div>
 
 			<ul class="grid gap-4">
-				{#each data as slice, index}
+				{#each data as slice, index (`${slice.category}-${index}`)}
 					<li
-						class="border-border bg-surface flex items-center justify-between gap-4 rounded-xl border px-4 py-3 text-sm"
+						class="flex items-center justify-between gap-4 rounded-xl border border-border bg-surface px-4 py-3 text-sm"
 					>
 						<div class="flex items-center gap-3">
 							<span
@@ -138,11 +150,11 @@
 								aria-hidden="true"
 							></span>
 							<div class="flex flex-col">
-								<span class="text-text-secondary font-medium">{slice.category}</span>
-								<span class="text-text-muted text-xs">{formatCurrency(slice.value)}</span>
+								<span class="font-medium text-text-secondary">{slice.category}</span>
+								<span class="text-xs text-text-muted">{formatCurrency(slice.value)}</span>
 							</div>
 						</div>
-						<span class="text-text-muted text-xs font-semibold tracking-wide uppercase">
+						<span class="text-xs font-semibold tracking-wide text-text-muted uppercase">
 							{slice.percentage.toFixed(1)}%
 						</span>
 					</li>

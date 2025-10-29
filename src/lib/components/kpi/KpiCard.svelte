@@ -21,18 +21,18 @@
 </script>
 
 <article
-	class={`rounded-card bg-surface-elevated shadow-elevated flex h-full flex-col justify-between gap-4 border p-6 ${accentClasses[accent] ?? accentClasses.neutral}`}
+	class={`flex h-full flex-col justify-between gap-4 rounded-card border bg-surface-elevated p-6 shadow-elevated ${accentClasses[accent] ?? accentClasses.neutral}`}
 >
 	<div class="flex flex-col gap-2">
-		<p class="text-text-muted text-xs font-medium tracking-wide uppercase">{label}</p>
-		<p class="text-text-secondary text-3xl font-semibold">{value}</p>
+		<p class="text-xs font-medium tracking-wide text-text-muted uppercase">{label}</p>
+		<p class="text-3xl font-semibold text-text-secondary">{value}</p>
 		{#if helper}
-			<p class="text-text-muted text-sm">{helper}</p>
+			<p class="text-sm text-text-muted">{helper}</p>
 		{/if}
 	</div>
 
 	{#if deltaLabel}
-		<p class="text-text-muted flex items-center gap-2 text-xs font-medium tracking-wide uppercase">
+		<p class="flex items-center gap-2 text-xs font-medium tracking-wide text-text-muted uppercase">
 			<span class="text-base">{deltaIcon()}</span>
 			{deltaLabel}
 		</p>

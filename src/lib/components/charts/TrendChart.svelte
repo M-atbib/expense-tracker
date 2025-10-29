@@ -1,9 +1,16 @@
+<svelte:options runes={true} />
+
 <script lang="ts">
 	import type { TrendSeriesPoint } from '$lib/types';
 	import { formatCompactNumber } from '$lib/utils/format';
 
-	export let title = 'Cashflow trend';
-	export let data: TrendSeriesPoint[] = [];
+	let {
+		title = 'Cashflow trend',
+		data = []
+	}: {
+		title?: string;
+		data?: TrendSeriesPoint[];
+	} = $props<{ title?: string; data?: TrendSeriesPoint[] }>();
 
 	const width = 520;
 	const height = 260;
@@ -24,16 +31,26 @@
 	};
 
 	const buildPoints = (key: 'income' | 'expenses', max: number) =>
-		data.map((point, index) => `${toX(index, data.length)},${toY(point[key], max)}`).join(' ');
+		data
+			.map(
+				(point: TrendSeriesPoint, index: number) =>
+					`${toX(index, data.length)},${toY(point[key], max)}`
+			)
+			.join(' ');
 
-	$: maxValue = Math.max(...data.flatMap((point) => [point.income, point.expenses]), 0);
-	$: incomePoints = buildPoints('income', maxValue);
-	$: expensePoints = buildPoints('expenses', maxValue);
+	const maxValue = $derived(
+		Math.max(...data.flatMap((point: TrendSeriesPoint) => [point.income, point.expenses]), 0)
+	);
+	const incomePoints = $derived(buildPoints('income', maxValue));
+	const expensePoints = $derived(buildPoints('expenses', maxValue));
 
 	const buildAreaPath = (key: 'income' | 'expenses', max: number) => {
 		if (data.length === 0) return '';
 		const topPoints = data
-			.map((point, index) => `L ${toX(index, data.length)} ${toY(point[key], max)}`)
+			.map(
+				(point: TrendSeriesPoint, index: number) =>
+					`L ${toX(index, data.length)} ${toY(point[key], max)}`
+			)
 			.join(' ')
 			.replace(/^L/, 'M');
 		const lastX = toX(data.length - 1, data.length);
@@ -41,31 +58,31 @@
 		return `${topPoints} ${baseLine}`;
 	};
 
-	$: incomeArea = buildAreaPath('income', maxValue);
-	$: expenseArea = buildAreaPath('expenses', maxValue);
+	const incomeArea = $derived(buildAreaPath('income', maxValue));
+	const expenseArea = $derived(buildAreaPath('expenses', maxValue));
 </script>
 
 <section
-	class="rounded-card border-border bg-surface-elevated shadow-elevated flex flex-col gap-5 border p-6"
+	class="flex flex-col gap-5 rounded-card border border-border bg-surface-elevated p-6 shadow-elevated"
 >
 	<header class="flex items-center justify-between">
 		<div class="flex flex-col gap-1">
-			<h3 class="text-text-secondary text-lg font-semibold">{title}</h3>
-			<p class="text-text-muted text-sm">Weekly view of income versus spending.</p>
+			<h3 class="text-lg font-semibold text-text-secondary">{title}</h3>
+			<p class="text-sm text-text-muted">Weekly view of income versus spending.</p>
 		</div>
-		<span class="text-text-muted text-xs tracking-wide uppercase">
+		<span class="text-xs tracking-wide text-text-muted uppercase">
 			{data.length} data point{data.length === 1 ? '' : 's'}
 		</span>
 	</header>
 
 	{#if data.length === 0}
 		<div
-			class="border-border-muted bg-surface-inset/60 text-text-muted flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed py-12 text-center"
+			class="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border-muted bg-surface-inset/60 py-12 text-center text-text-muted"
 		>
 			<p class="text-sm">Add transactions to generate a trend chart.</p>
 		</div>
 	{:else}
-		<div class="border-border bg-surface-inset/60 overflow-hidden rounded-xl border">
+		<div class="overflow-hidden rounded-xl border border-border bg-surface-inset/60">
 			<svg
 				role="img"
 				aria-label="Line chart comparing income versus expenses"
@@ -91,7 +108,7 @@
 				</defs>
 
 				<g stroke="var(--color-border-muted)" stroke-width="1" stroke-dasharray="4 6">
-					{#each [0.25, 0.5, 0.75] as ratio}
+					{#each [0.25, 0.5, 0.75] as ratio (ratio)}
 						<line
 							x1={paddingX}
 							x2={width - paddingX}
@@ -122,7 +139,7 @@
 					stroke-linejoin="round"
 				/>
 
-				{#each data as point, index}
+				{#each data as point, index (`${point.label}-${index}`)}
 					<g>
 						<circle
 							cx={toX(index, data.length)}
@@ -141,7 +158,7 @@
 
 				<g font-size="11" fill="var(--color-text-muted)">
 					{#if maxValue > 0}
-						{#each [maxValue, maxValue * 0.66, maxValue * 0.33] as tick, idx}
+						{#each [maxValue, maxValue * 0.66, maxValue * 0.33] as tick (tick)}
 							<text x="8" y={toY(tick, maxValue) + 4} text-anchor="start">
 								{formatCompactNumber(Math.max(tick, 0))}
 							</text>
@@ -150,7 +167,7 @@
 				</g>
 
 				<g font-size="11" fill="var(--color-text-muted)">
-					{#each data as point, index}
+					{#each data as point, index (`${point.label}-${index}`)}
 						<text x={toX(index, data.length)} y={height - paddingY / 2} text-anchor="middle">
 							{point.label}
 						</text>

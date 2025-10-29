@@ -1,5 +1,6 @@
 import {
 	endOfMonth,
+	format,
 	formatISO,
 	isAfter,
 	isBefore,
@@ -8,7 +9,8 @@ import {
 	parseISO,
 	startOfMonth,
 	startOfYear,
-	subMonths
+	subMonths,
+	differenceInCalendarDays
 } from 'date-fns';
 
 import type { PeriodFilter, PeriodPreset } from '$lib/types';
@@ -106,4 +108,68 @@ export const compareEntriesByDateDesc = (a: string, b: string): number => {
 	if (dateA.getTime() === dateB.getTime()) return 0;
 
 	return dateA.getTime() > dateB.getTime() ? -1 : 1;
+};
+
+export const summarizePeriodRange = (filter: PeriodFilter) => {
+	const start = parseISO(filter.startDate);
+	const end = parseISO(filter.endDate);
+
+	if (!isValid(start) || !isValid(end)) {
+		return {
+			startLabel: filter.startDate,
+			endLabel: filter.endDate,
+			rangeLabel: `${filter.startDate} to ${filter.endDate}`,
+			dayCount: null
+		};
+	}
+
+	const startLabel = format(start, 'MMM d, yyyy');
+	const endLabel = format(end, 'MMM d, yyyy');
+	const dayCount = Math.abs(differenceInCalendarDays(end, start)) + 1;
+
+	return {
+		startLabel,
+		endLabel,
+		rangeLabel: `${startLabel} to ${endLabel}`,
+		dayCount
+	};
+};
+
+export const describeRangeAdjustments = (
+	userStart: string,
+	userEnd: string,
+	normalized: IsoDateRange,
+	now = new Date()
+): string[] => {
+	const adjustments: string[] = [];
+
+	const parsedUserStart = parseISO(userStart);
+	const parsedUserEnd = parseISO(userEnd);
+	const parsedNormalizedEnd = parseISO(normalized.end);
+
+	const userStartValid = isValid(parsedUserStart);
+	const userEndValid = isValid(parsedUserEnd);
+
+	if (!userStartValid) {
+		adjustments.push('Start date reset to the first day of the current month');
+	}
+
+	if (!userEndValid) {
+		adjustments.push('End date defaulted to today');
+	}
+
+	if (userStartValid && userEndValid && isAfter(parsedUserStart, parsedUserEnd)) {
+		adjustments.push('Start date was moved before the end date');
+	}
+
+	if (
+		userEndValid &&
+		isAfter(parsedUserEnd, now) &&
+		isValid(parsedNormalizedEnd) &&
+		parsedNormalizedEnd.getTime() !== parsedUserEnd.getTime()
+	) {
+		adjustments.push("Future dates aren't supported yet—end date reset to today");
+	}
+
+	return adjustments;
 };
