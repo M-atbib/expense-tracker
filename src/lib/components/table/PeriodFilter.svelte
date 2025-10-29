@@ -1,8 +1,16 @@
+<svelte:options runes={true} />
+
 <script lang="ts">
-	import { differenceInCalendarDays, format, isAfter, parseISO } from 'date-fns';
+	import { format } from 'date-fns';
 
 	import { transactionsStore } from '$lib/stores/transactions';
+	import { get } from 'svelte/store';
 	import type { PeriodPreset } from '$lib/types';
+	import {
+		describeRangeAdjustments,
+		normalizeCustomRange,
+		summarizePeriodRange
+	} from '$lib/utils/filters';
 
 	const presetOptions: Array<{ value: PeriodPreset; label: string; description: string }> = [
 		{ value: 'this_month', label: 'This month', description: 'Current month to today' },
@@ -13,25 +21,35 @@
 
 	const todayIso = format(new Date(), 'yyyy-MM-dd');
 
-	const formatDate = (value: string) => {
-		const parsed = parseISO(value);
-		if (Number.isNaN(parsed.getTime())) return value;
-		return format(parsed, 'MMM d, yyyy');
-	};
+	let storeState = $state(get(transactionsStore));
 
-	$: state = $transactionsStore;
-	$: filter = state.filter;
-	$: activePreset = filter.preset;
+	$effect(() => {
+		const unsubscribe = transactionsStore.subscribe((value) => {
+			storeState = value;
+		});
 
-	let customStart = filter.startDate;
-	let customEnd = filter.endDate;
-	let feedback: string | null = null;
+		return () => {
+			unsubscribe();
+		};
+	});
 
-	$: if (activePreset !== 'custom') {
-		customStart = filter.startDate;
-		customEnd = filter.endDate;
-		feedback = null;
-	}
+	const filter = $derived(storeState.filter);
+	const activePreset = $derived(filter.preset);
+	let customStart = $state('');
+	let customEnd = $state('');
+	let feedback = $state(null as string | null);
+
+	const rangeSummary = $derived(summarizePeriodRange(filter));
+
+	$effect(() => {
+		const currentFilter = filter;
+		customStart = currentFilter.startDate;
+		customEnd = currentFilter.endDate;
+
+		if (currentFilter.preset !== 'custom') {
+			feedback = null;
+		}
+	});
 
 	const handlePresetClick = (preset: PeriodPreset) => {
 		if (preset === 'custom') {
@@ -47,46 +65,29 @@
 
 		const userStart = customStart;
 		const userEnd = customEnd;
-		const parsedStart = parseISO(userStart);
-		const parsedEnd = parseISO(userEnd);
+		const normalized = normalizeCustomRange(userStart, userEnd);
 
-		transactionsStore.setCustomRange(customStart, customEnd);
+		transactionsStore.setCustomRange(normalized.start, normalized.end);
+		customStart = normalized.start;
+		customEnd = normalized.end;
 
-		const adjustments: string[] = [];
-		if (isAfter(parsedStart, parsedEnd)) {
-			adjustments.push('Start date was moved before the end date');
-		}
-
-		if (isAfter(parseISO(userEnd), parseISO(todayIso))) {
-			adjustments.push("Future dates aren't supported yet—end date reset to today");
-		}
-
-		if (adjustments.length > 0) {
-			feedback = adjustments.join('. ') + '.';
-		}
+		const adjustments = describeRangeAdjustments(userStart, userEnd, normalized);
+		feedback = adjustments.length > 0 ? `${adjustments.join('. ')}.` : null;
 	};
-
-	$: rangeLength = (() => {
-		const start = parseISO(filter.startDate);
-		const end = parseISO(filter.endDate);
-		if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return null;
-		const days = Math.abs(differenceInCalendarDays(end, start)) + 1;
-		return days;
-	})();
 </script>
 
 <section
-	class="rounded-card border-border bg-surface-elevated shadow-elevated flex flex-col gap-6 border p-6"
+	class="flex flex-col gap-6 rounded-card border border-border bg-surface-elevated p-6 shadow-elevated"
 >
 	<header class="flex flex-col gap-2">
-		<h2 class="text-text-secondary text-lg font-semibold">Period filter</h2>
-		<p class="text-text-muted text-sm">
+		<h2 class="text-lg font-semibold text-text-secondary">Period filter</h2>
+		<p class="text-sm text-text-muted">
 			Choose a preset or define a custom range to refine the entries table and downstream insights.
 		</p>
 	</header>
 
 	<div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-		{#each presetOptions as option}
+		{#each presetOptions as option (option.value)}
 			<button
 				type="button"
 				class={`flex flex-col gap-1 rounded-xl border px-4 py-3 text-left transition ${
@@ -94,66 +95,66 @@
 						? 'border-accent bg-accent/10 text-text-secondary'
 						: 'border-border bg-surface text-text-muted hover:border-border-muted'
 				}`}
-				on:click={() => handlePresetClick(option.value)}
+				onclick={() => handlePresetClick(option.value)}
 			>
-				<span class="text-text-secondary text-sm font-semibold">{option.label}</span>
-				<span class="text-text-muted text-xs">{option.description}</span>
+				<span class="text-sm font-semibold text-text-secondary">{option.label}</span>
+				<span class="text-xs text-text-muted">{option.description}</span>
 			</button>
 		{/each}
 	</div>
 
 	<div
-		class="border-border-muted bg-surface-inset/60 grid gap-4 rounded-xl border p-4 sm:grid-cols-2"
+		class="grid gap-4 rounded-xl border border-border-muted bg-surface-inset/60 p-4 sm:grid-cols-2"
 	>
 		<div class="flex flex-col gap-2">
-			<label class="text-text-muted text-xs font-medium tracking-wide uppercase" for="custom-start"
+			<label class="text-xs font-medium tracking-wide text-text-muted uppercase" for="custom-start"
 				>Start date</label
 			>
 			<input
 				id="custom-start"
 				type="date"
 				bind:value={customStart}
-				class="border-border bg-surface text-text-primary focus-visible:ring-accent focus-visible:ring-offset-surface-elevated h-10 rounded-lg border px-3 text-sm transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+				class="h-10 rounded-lg border border-border bg-surface px-3 text-sm text-text-primary transition outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-elevated"
 				max={filter.endDate}
 				disabled={activePreset !== 'custom'}
-				on:change={applyCustomRange}
+				onchange={applyCustomRange}
 			/>
 		</div>
 
 		<div class="flex flex-col gap-2">
-			<label class="text-text-muted text-xs font-medium tracking-wide uppercase" for="custom-end"
+			<label class="text-xs font-medium tracking-wide text-text-muted uppercase" for="custom-end"
 				>End date</label
 			>
 			<input
 				id="custom-end"
 				type="date"
 				bind:value={customEnd}
-				class="border-border bg-surface text-text-primary focus-visible:ring-accent focus-visible:ring-offset-surface-elevated h-10 rounded-lg border px-3 text-sm transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+				class="h-10 rounded-lg border border-border bg-surface px-3 text-sm text-text-primary transition outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-elevated"
 				min={customStart}
 				max={todayIso}
 				disabled={activePreset !== 'custom'}
-				on:change={applyCustomRange}
+				onchange={applyCustomRange}
 			/>
 		</div>
 
-		<div class="text-text-muted flex flex-wrap items-center gap-4 text-sm sm:col-span-2">
+		<div class="flex flex-wrap items-center gap-4 text-sm text-text-muted sm:col-span-2">
 			<span>
-				<span class="text-text-secondary">{formatDate(filter.startDate)}</span>
-				<span class="text-text-muted mx-2">to</span>
-				<span class="text-text-secondary">{formatDate(filter.endDate)}</span>
+				<span class="text-text-secondary">{rangeSummary.startLabel}</span>
+				<span class="mx-2 text-text-muted">to</span>
+				<span class="text-text-secondary">{rangeSummary.endLabel}</span>
 			</span>
-			{#if rangeLength}
+			{#if rangeSummary.dayCount}
 				<span
-					class="border-border-muted rounded-full border px-3 py-1 text-xs tracking-wide uppercase"
+					class="rounded-full border border-border-muted px-3 py-1 text-xs tracking-wide uppercase"
 				>
-					{rangeLength} day{rangeLength === 1 ? '' : 's'}
+					{rangeSummary.dayCount} day{rangeSummary.dayCount === 1 ? '' : 's'}
 				</span>
 			{/if}
 		</div>
 
 		{#if feedback}
 			<p
-				class="border-accent/40 bg-accent/5 text-accent rounded-lg border px-3 py-2 text-xs sm:col-span-2"
+				class="rounded-lg border border-accent/40 bg-accent/5 px-3 py-2 text-xs text-accent sm:col-span-2"
 			>
 				{feedback}
 			</p>

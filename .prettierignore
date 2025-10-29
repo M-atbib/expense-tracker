@@ -5,5 +5,14 @@ yarn.lock
 bun.lock
 bun.lockb
 
+# Internal tooling and generated references
+.codex/
+.github/
+.specify/
+.vscode/
+AGENTS.md
+docs/
+specs/
+
 # Miscellaneous
 /static/
