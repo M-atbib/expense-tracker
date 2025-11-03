@@ -1,10 +1,21 @@
+<svelte:options runes={true} />
+
 <script lang="ts">
-	export let label: string;
-	export let value: string;
-	export let helper: string = '';
-	export let accent: 'positive' | 'negative' | 'accent' | 'neutral' = 'neutral';
-	export let deltaLabel: string | null = null;
-	export let deltaDirection: 'up' | 'down' | 'flat' = 'flat';
+	const {
+		label,
+		value,
+		helper = '',
+		accent = 'neutral',
+		deltaLabel = null,
+		deltaDirection = 'flat'
+	} = $props<{
+		label: string;
+		value: string;
+		helper?: string;
+		accent?: 'positive' | 'negative' | 'accent' | 'neutral';
+		deltaLabel?: string | null;
+		deltaDirection?: 'up' | 'down' | 'flat';
+	}>();
 
 	const accentClasses: Record<typeof accent, string> = {
 		positive: 'bg-positive/10 text-positive border-positive/30',
