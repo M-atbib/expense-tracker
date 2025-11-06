@@ -1,0 +1,355 @@
+[
+  {
+    "id": "TC001",
+    "title": "Transaction Form Successful Submission",
+    "description": "Verify that a transaction is successfully submitted with valid inputs and appears at the top of the transactions table with form reset and success confirmation.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open the expense tracker dashboard page"
+      },
+      {
+        "type": "action",
+        "description": "Fill the transaction form using today's date, positive amount, label, select a primary category and valid dynamic subcategory"
+      },
+      {
+        "type": "action",
+        "description": "Submit the transaction form"
+      },
+      {
+        "type": "assertion",
+        "description": "Check form validation passes with no errors"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new transaction appears instantly at the top of the entries table"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the form resets to default values and success confirmation is displayed"
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "Transaction Form Field Validation Errors",
+    "description": "Check that the transaction form displays inline validation errors when required fields are missing, amount is zero/negative, or date is future with user feedback.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open the dashboard and leave the date field empty"
+      },
+      {
+        "type": "action",
+        "description": "Click submit"
+      },
+      {
+        "type": "assertion",
+        "description": "Validate required field error is shown for date"
+      },
+      {
+        "type": "action",
+        "description": "Enter a zero amount and submit"
+      },
+      {
+        "type": "assertion",
+        "description": "Validate inline positive amount error is shown"
+      },
+      {
+        "type": "action",
+        "description": "Enter a date in the future and submit"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm a warning message about future date is displayed"
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Dynamic Subcategory Options Reflect Selected Primary Category",
+    "description": "Verify that selecting a primary category updates the subcategory dropdown with corresponding predefined options and handles rapid category changes gracefully.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Select 'Income' as primary category in the transaction form"
+      },
+      {
+        "type": "assertion",
+        "description": "Subcategory dropdown lists only Income subcategories: Salary, Freelance, Other"
+      },
+      {
+        "type": "action",
+        "description": "Change primary category quickly to Fixed Expense, then Variable Expense"
+      },
+      {
+        "type": "assertion",
+        "description": "Subcategory updates smoothly without errors to Fixed Expense then Variable Expense subcategories"
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Period Filter Presets and Custom Date Range Update Transactions and KPIs",
+    "description": "Ensure that selecting period filter presets or entering custom date ranges instantly filters displayed transactions, updates KPI cards, and visual charts correspondingly.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Select 'This Month' preset period filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Entries table shows only transactions within this month"
+      },
+      {
+        "type": "assertion",
+        "description": "KPI cards recalculate totals matching filtered data within ±1 currency tolerance"
+      },
+      {
+        "type": "assertion",
+        "description": "Trend chart and category donut chart update data consistent with filtered transactions"
+      },
+      {
+        "type": "action",
+        "description": "Enter a custom date range with start and end dates"
+      },
+      {
+        "type": "assertion",
+        "description": "All displayed transactions and KPIs update as expected"
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Empty State Display When No Transactions Match Filter",
+    "description": "Verify that when filtered period has no transactions, the entries table shows a dark mode friendly empty state message with guidance for the user.",
+    "category": "error handling",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Apply a period filter with a date range that matches no transactions"
+      },
+      {
+        "type": "assertion",
+        "description": "Empty table state is shown with dark theme styling and user guidance text"
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Table Performance and Pagination with 200+ Entries",
+    "description": "Confirm that the entries table remains performant, renders smoothly, and uses pagination or staged loading strategies when handling over 200 transaction entries.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Load or add 200+ transaction entries"
+      },
+      {
+        "type": "assertion",
+        "description": "Table renders without lag or freezing"
+      },
+      {
+        "type": "assertion",
+        "description": "Pagination or staged loading controls appear and function correctly"
+      },
+      {
+        "type": "action",
+        "description": "Navigate through pagination controls or trigger staged loading"
+      },
+      {
+        "type": "assertion",
+        "description": "Transactions load smoothly with correct data displayed"
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "KPI Card Accuracy for Total Income, Expenses, Savings, and Leftover",
+    "description": "Verify KPI card calculations correctly sum and display total income, total expenses, amount saved, and leftover balances for filtered periods matching manual calculations within ±1 currency unit.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Apply period filters with known transactions sums including income and expenses"
+      },
+      {
+        "type": "assertion",
+        "description": "Check total income value on KPI card matches manual summation within ±1 tolerance"
+      },
+      {
+        "type": "assertion",
+        "description": "Check total expenses KPI card matches manual sum within ±1 tolerance"
+      },
+      {
+        "type": "assertion",
+        "description": "Check amount saved and leftover KPI values are correctly calculated and displayed"
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Trend and Category Donut Charts Data Accuracy and Tooltip Accessibility",
+    "description": "Ensure that the time-series trend chart and category donut chart render accurate, accessible data reflecting filtered transactions, provide tooltips showing precise values, and visually integrate with the dark mode theme.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Apply a period filter with known transactions"
+      },
+      {
+        "type": "assertion",
+        "description": "Trend chart accurately displays weekly income vs. expenses time-series data"
+      },
+      {
+        "type": "assertion",
+        "description": "Category donut chart proportionally represents expense distribution by category"
+      },
+      {
+        "type": "action",
+        "description": "Hover or focus on chart segments"
+      },
+      {
+        "type": "assertion",
+        "description": "Tooltips display correct and precise data values"
+      },
+      {
+        "type": "assertion",
+        "description": "Charts use dark mode palette colors and are clearly visible with sufficient contrast"
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Responsive Layout and Dark Mode Accessibility on Different Viewports",
+    "description": "Validate that the dashboard layout maintains usability and readability with no horizontal scroll or overflow on viewport widths 320px, 375px, 768px, and 1440px and that the dark mode theme meets contrast ratio ≥4.5:1 for text and UI elements.",
+    "category": "ui",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Resize viewport or test on devices with widths: 320px, 375px, 768px, and 1440px"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify no horizontal scroll and no UI overlap or content cutoff"
+      },
+      {
+        "type": "assertion",
+        "description": "Check all text and interactive elements meet accessible contrast ratio (≥4.5:1) in dark mode theme"
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure vertical stacked layout is used below 768px viewport width"
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Form Preservation and Inline Error on Incomplete Submission",
+    "description": "Verify that submitting an incomplete or invalid transaction form does not reset entered data but highlights inputs with errors inline and preserves other valid fields.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Fill some fields in the transaction form but omit required ones or enter invalid data"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form"
+      },
+      {
+        "type": "assertion",
+        "description": "Check that form fields retain user input except fields with errors"
+      },
+      {
+        "type": "assertion",
+        "description": "Validate inline errors highlight only invalid input fields"
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Handling Edge Cases: Zero or Negative Amounts and Future Dates",
+    "description": "Test the system's handling of edge case inputs such as zero or negative amounts and future transaction dates, ensuring proper user feedback and preventing erroneous data entry.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Attempt to submit a transaction with a zero amount"
+      },
+      {
+        "type": "assertion",
+        "description": "Form rejects submission and displays respective validation error"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to submit a transaction with a negative amount"
+      },
+      {
+        "type": "assertion",
+        "description": "Form rejects submission and shows validation error for positive amount enforcement"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to submit a transaction with date set in the future"
+      },
+      {
+        "type": "assertion",
+        "description": "Display warning about future date but allow submission if business logic permits, or block with error if not"
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Instant Feedback on Filtering Without Page Reload",
+    "description": "Ensure that applying filters (presets and custom ranges) updates transaction entries, KPIs, and charts instantly without any page reload or flicker.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Apply various period filters and custom date ranges consecutively"
+      },
+      {
+        "type": "assertion",
+        "description": "Entries table, KPI cards, and charts update immediately without page reload"
+      },
+      {
+        "type": "assertion",
+        "description": "No flickering or UI flash observed during filter changes"
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "User Comfort with Dark Theme After Continuous Usage",
+    "description": "Validate through user surveys or usability testing that at least 90% of pilot users report high comfort and satisfaction using the dark mode theme after daily usage of one week.",
+    "category": "ui",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Conduct pilot user study with daily usage of the app over one week"
+      },
+      {
+        "type": "assertion",
+        "description": "Collect comfort rating data and verify ≥90% positive feedback on dark theme usability"
+      }
+    ]
+  }
+]

@@ -1,0 +1,153 @@
+{
+  "meta": {
+    "project": "Personal Expenses Tracker Dashboard",
+    "date": "2025-11-04",
+    "prepared_by": "Software Development Manager"
+  },
+  "product_overview": "A simple yet efficient personal expenses tracker web application that allows users to record income and expenses, view transaction history, filter by date periods, and monitor key financial insights via KPIs and visual charts. The app is designed with a dark mode-first theme and responsive layout for accessibility on both desktop and mobile devices.",
+  "core_goals": [
+    "Provide an easy-to-use form for quick entry of income and expenses without the need for spreadsheet software.",
+    "Present transaction entries in a clear, responsive table with robust period filtering features.",
+    "Visualize financial health through KPIs and interactive charts to enable users to monitor their budget trends effectively.",
+    "Ensure the interface uses a dark themed color palette that is easy on the eyes and accessible, with no theme switching for the initial release.",
+    "Support smooth user experience across device sizes, ensuring readability and usability on mobile, tablet, and desktop.",
+    "Provide instant feedback and validation for form inputs and filtered views without page reloads."
+  ],
+  "key_features": [
+    "Transaction entry form capturing date, amount, label, primary category, and dynamic subcategory options.",
+    "Predefined subcategories with flexibility for future extensibility: Income (Salary, Freelance, Other), Fixed Expense (Rent/Mortgage, Utilities, Subscriptions), Variable Expense (Groceries, Dining Out, Travel/Leisure).",
+    "In-memory transaction store that updates instantly upon new entry submission, displaying newest transactions at the top.",
+    "Period filtering with presets (This Month, Last Month, Year to Date) plus a customizable date range picker affecting displayed transactions and KPI calculations.",
+    "Responsive entries table showing date, label, category, subcategory, and colored amount values indicating income (green) vs expenses (red).",
+    "KPI cards displaying total income, total expenses, amount saved, and end-of-period leftover balance, with clear labels on calculations.",
+    "Two main visual charts: a time-series line and area chart comparing weekly income and expenses, and a donut chart showing expense distribution by category, both with tooltips and dark palette integration.",
+    "Dark mode-first theme with charcoal background and muted accent colors ensuring accessible contrast ratios and a stacked vertical layout below 768px viewport width.",
+    "Form validation including required field enforcement, positive amount checks, future date warnings, and inline user feedback on errors.",
+    "Table supports large datasets (200+ entries) with smooth rendering and pagination or staged loading strategies."
+  ],
+  "user_flow_summary": [
+    "User opens the single-page application with dark mode enabled by default.",
+    "User fills the transaction form with date (default today), amount (positive currency), label, selects primary category, then dynamically picks appropriate subcategory.",
+    "On form submission, if validation passes, the new transaction appears instantly at the top of the entries table and the form resets with a success confirmation.",
+    "User reviews transactions in a scrollable, responsive table that updates live with transaction additions and period filters.",
+    "User applies a period filter by selecting a preset or entering a custom range; entries, KPIs, and charts update instantly to reflect the selection.",
+    "User views KPI cards summarizing total income, expenses, amount saved, and leftover balance for the selected period.",
+    "User analyzes financial trends using the weekly income vs expenses trend chart and category distribution donut chart, both supporting tooltips for precise data.",
+    "If no transactions match a filter, a dark mode friendly empty state with guidance is shown in the table.",
+    "User can interact seamlessly across desktop, tablet, and mobile devices with no horizontal scroll and visually clear interfaces."
+  ],
+  "validation_criteria": [
+    "Form submission stores a valid transaction and displays it without page reload; incomplete submissions highlight errors inline preserving data.",
+    "Period filter correctly narrows transactions to selected ranges and updates all summaries and visualizations accordingly.",
+    "KPI cards recalculate totals correctly matching manual computations within a ±1 currency unit tolerance for multiple period selections.",
+    "Charts display accurate summary data consistent with filtered sets and provide accessible tooltips.",
+    "Dark mode usability confirmed with accessible contrast (≥4.5:1) and no layout overflows on viewports 320px, 375px, 768px, and 1440px.",
+    "Table remains performant and responsive when handling 200+ transaction entries via pagination or staged loading.",
+    "Edge cases such as future transaction dates, zero/negative amounts, empty filter results, and rapid category changes in form subcategory fields are handled gracefully with user feedback.",
+    "Pilot user surveys show ≥90% comfort rating for the dark theme after daily usage over one week."
+  ],
+  "code_summary": {
+    "tech_stack": [
+      "TypeScript",
+      "SvelteKit",
+      "Svelte 5",
+      "Tailwind CSS",
+      "Vite",
+      "date-fns"
+    ],
+    "features": [
+      {
+        "name": "Root Layout and Theming",
+        "description": "Applies global styling, favicon, and theme colors for the SvelteKit app shell.",
+        "files": [
+          "src/routes/+layout.svelte",
+          "src/app.css"
+        ]
+      },
+      {
+        "name": "Dashboard Page",
+        "description": "Main expense dashboard that composes form, KPIs, charts, and tables from the transactions store.",
+        "files": [
+          "src/routes/+page.svelte"
+        ]
+      },
+      {
+        "name": "Transactions Store",
+        "description": "Writable store that manages transaction entries, filtering, derived KPI metrics, and exposes mutation helpers.",
+        "files": [
+          "src/lib/stores/transactions.ts"
+        ]
+      },
+      {
+        "name": "Transaction Form Component",
+        "description": "Interactive form with validation and dynamic subcategory options for creating new transactions.",
+        "files": [
+          "src/lib/components/form/TransactionForm.svelte"
+        ]
+      },
+      {
+        "name": "Period Filter Component",
+        "description": "Filter panel that selects presets or custom date ranges and syncs them to the transactions store.",
+        "files": [
+          "src/lib/components/table/PeriodFilter.svelte"
+        ]
+      },
+      {
+        "name": "Entries Table Component",
+        "description": "Tabular view of filtered transactions with formatted values and removal actions.",
+        "files": [
+          "src/lib/components/table/EntriesTable.svelte"
+        ]
+      },
+      {
+        "name": "KPI Card Component",
+        "description": "Reusable card for displaying key financial metrics with accent styling and delta indicators.",
+        "files": [
+          "src/lib/components/kpi/KpiCard.svelte"
+        ]
+      },
+      {
+        "name": "Trend Chart Component",
+        "description": "Responsive SVG line and area chart visualizing weekly income versus expenses.",
+        "files": [
+          "src/lib/components/charts/TrendChart.svelte"
+        ]
+      },
+      {
+        "name": "Category Donut Component",
+        "description": "SVG donut chart summarizing expense distribution by category with legend and totals.",
+        "files": [
+          "src/lib/components/charts/CategoryDonut.svelte"
+        ]
+      },
+      {
+        "name": "Filtering Utilities",
+        "description": "Date range helpers for presets, normalization, range summaries, and validation.",
+        "files": [
+          "src/lib/utils/filters.ts"
+        ]
+      },
+      {
+        "name": "Formatting Utilities",
+        "description": "Helpers for currency, ISO date, and compact number formatting.",
+        "files": [
+          "src/lib/utils/format.ts"
+        ]
+      },
+      {
+        "name": "Theme Utilities",
+        "description": "Utility functions for referencing theme tokens and building color mix strings.",
+        "files": [
+          "src/lib/utils/theme.ts"
+        ]
+      },
+      {
+        "name": "Domain Types",
+        "description": "TypeScript definitions for transactions, filters, KPIs, and theming tokens.",
+        "files": [
+          "src/lib/types.ts"
+        ]
+      }
+    ]
+  }
+}

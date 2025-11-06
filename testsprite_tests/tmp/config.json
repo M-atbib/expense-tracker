@@ -1,0 +1,18 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:5173",
+  "loginUser": "mokhtaratbib567@gmail.com",
+  "loginPassword": "M@tbib.TestSprite23",
+  "executionArgs": {
+    "projectName": "expense-tracker",
+    "projectPath": "/Users/test/Projects/LearningProjects/expense-tracker",
+    "testIds": [],
+    "additionalInstruction": "",
+    "envs": {
+      "API_KEY": "sk-user-NCuObKYRx_XQuVXVDyB6xefVi08_NVUQYwQw1G47GjqUNmw5wHg0K1CSFVDYmWEQnnkw_X2GjimwiFBmifOepH4ldhdU4hL_ATx2cdu_KpC0uDYFCuKEN6Ef5-5X4X_f3EE"
+    }
+  },
+  "proxy": "http://b0659a88-eb16-47e7-b3c8-871c1639c3ed:qN5N1DT3vLJM3bGvFJ5FUd8Q9K1NjoIN@tun.testsprite.com:8080"
+}

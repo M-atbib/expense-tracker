@@ -1,0 +1,104 @@
+{
+  "tech_stack": [
+    "TypeScript",
+    "SvelteKit",
+    "Svelte 5",
+    "Tailwind CSS",
+    "Vite",
+    "date-fns"
+  ],
+  "features": [
+    {
+      "name": "Root Layout and Theming",
+      "description": "Applies global styling, favicon, and theme colors for the SvelteKit app shell.",
+      "files": [
+        "src/routes/+layout.svelte",
+        "src/app.css"
+      ]
+    },
+    {
+      "name": "Dashboard Page",
+      "description": "Main expense dashboard that composes form, KPIs, charts, and tables from the transactions store.",
+      "files": [
+        "src/routes/+page.svelte"
+      ]
+    },
+    {
+      "name": "Transactions Store",
+      "description": "Writable store that manages transaction entries, filtering, derived KPI metrics, and exposes mutation helpers.",
+      "files": [
+        "src/lib/stores/transactions.ts"
+      ]
+    },
+    {
+      "name": "Transaction Form Component",
+      "description": "Interactive form with validation and dynamic subcategory options for creating new transactions.",
+      "files": [
+        "src/lib/components/form/TransactionForm.svelte"
+      ]
+    },
+    {
+      "name": "Period Filter Component",
+      "description": "Filter panel that selects presets or custom date ranges and syncs them to the transactions store.",
+      "files": [
+        "src/lib/components/table/PeriodFilter.svelte"
+      ]
+    },
+    {
+      "name": "Entries Table Component",
+      "description": "Tabular view of filtered transactions with formatted values and removal actions.",
+      "files": [
+        "src/lib/components/table/EntriesTable.svelte"
+      ]
+    },
+    {
+      "name": "KPI Card Component",
+      "description": "Reusable card for displaying key financial metrics with accent styling and delta indicators.",
+      "files": [
+        "src/lib/components/kpi/KpiCard.svelte"
+      ]
+    },
+    {
+      "name": "Trend Chart Component",
+      "description": "Responsive SVG line and area chart visualizing weekly income versus expenses.",
+      "files": [
+        "src/lib/components/charts/TrendChart.svelte"
+      ]
+    },
+    {
+      "name": "Category Donut Component",
+      "description": "SVG donut chart summarizing expense distribution by category with legend and totals.",
+      "files": [
+        "src/lib/components/charts/CategoryDonut.svelte"
+      ]
+    },
+    {
+      "name": "Filtering Utilities",
+      "description": "Date range helpers for presets, normalization, range summaries, and validation.",
+      "files": [
+        "src/lib/utils/filters.ts"
+      ]
+    },
+    {
+      "name": "Formatting Utilities",
+      "description": "Helpers for currency, ISO date, and compact number formatting.",
+      "files": [
+        "src/lib/utils/format.ts"
+      ]
+    },
+    {
+      "name": "Theme Utilities",
+      "description": "Utility functions for referencing theme tokens and building color mix strings.",
+      "files": [
+        "src/lib/utils/theme.ts"
+      ]
+    },
+    {
+      "name": "Domain Types",
+      "description": "TypeScript definitions for transactions, filters, KPIs, and theming tokens.",
+      "files": [
+        "src/lib/types.ts"
+      ]
+    }
+  ]
+}
