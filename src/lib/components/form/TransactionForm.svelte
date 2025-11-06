@@ -31,6 +31,12 @@
 	let errors = $state<FormErrors>({});
 	let showSuccess = $state(false);
 	let subcategoryOptions = $state<string[]>([]);
+	// const subcategorySummary = $derived.by(() => {
+	// 	const label = CATEGORY_LABELS[form.primaryCategory];
+	// 	const list =
+	// 		subcategoryOptions.length > 0 ? subcategoryOptions.join(', ') : 'Add categories later';
+	// 	return `Subcategory dropdown lists only ${label} subcategories: ${list}`;
+	// });
 
 	$effect(() => {
 		const options = transactionsStore.getSubcategories(form.primaryCategory);
@@ -180,6 +186,13 @@
 			{#if errors.subCategory}
 				<p class="text-xs text-negative">{errors.subCategory}</p>
 			{/if}
+			<!-- <p
+				class="text-xs text-text-muted"
+				aria-live="polite"
+				data-testid="subcategory-options-hint"
+			>
+				{subcategorySummary}
+			</p> -->
 		</div>
 
 		<div class="flex flex-col gap-2 sm:col-span-2">

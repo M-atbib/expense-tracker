@@ -103,61 +103,68 @@
 		{/each}
 	</div>
 
-	<div
-		class="grid gap-4 rounded-xl border border-border-muted bg-surface-inset/60 p-4 sm:grid-cols-2"
-	>
-		<div class="flex flex-col gap-2">
-			<label class="text-xs font-medium tracking-wide text-text-muted uppercase" for="custom-start"
-				>Start date</label
-			>
-			<input
-				id="custom-start"
-				type="date"
-				bind:value={customStart}
-				class="h-10 rounded-lg border border-border bg-surface px-3 text-sm text-text-primary transition outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-elevated"
-				max={filter.endDate}
-				disabled={activePreset !== 'custom'}
-				onchange={applyCustomRange}
-			/>
-		</div>
-
-		<div class="flex flex-col gap-2">
-			<label class="text-xs font-medium tracking-wide text-text-muted uppercase" for="custom-end"
-				>End date</label
-			>
-			<input
-				id="custom-end"
-				type="date"
-				bind:value={customEnd}
-				class="h-10 rounded-lg border border-border bg-surface px-3 text-sm text-text-primary transition outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-elevated"
-				min={customStart}
-				max={todayIso}
-				disabled={activePreset !== 'custom'}
-				onchange={applyCustomRange}
-			/>
-		</div>
-
-		<div class="flex flex-wrap items-center gap-4 text-sm text-text-muted sm:col-span-2">
-			<span>
-				<span class="text-text-secondary">{rangeSummary.startLabel}</span>
-				<span class="mx-2 text-text-muted">to</span>
-				<span class="text-text-secondary">{rangeSummary.endLabel}</span>
-			</span>
-			{#if rangeSummary.dayCount}
-				<span
-					class="rounded-full border border-border-muted px-3 py-1 text-xs tracking-wide uppercase"
+	{#if activePreset === 'custom'}
+		<div
+			class="grid gap-4 rounded-xl border border-border-muted bg-surface-inset/60 p-4 sm:grid-cols-2"
+			data-testid="custom-range-panel"
+		>
+			<div class="flex flex-col gap-2">
+				<label class="text-xs font-medium tracking-wide text-text-muted uppercase" for="custom-start"
+					>Start date</label
 				>
-					{rangeSummary.dayCount} day{rangeSummary.dayCount === 1 ? '' : 's'}
-				</span>
-			{/if}
+				<input
+					id="custom-start"
+					type="date"
+					bind:value={customStart}
+					class="h-10 rounded-lg border border-border bg-surface px-3 text-sm text-text-primary transition outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-elevated"
+					max={filter.endDate}
+					onchange={applyCustomRange}
+				/>
+			</div>
+
+			<div class="flex flex-col gap-2">
+				<label class="text-xs font-medium tracking-wide text-text-muted uppercase" for="custom-end"
+					>End date</label
+				>
+				<input
+					id="custom-end"
+					type="date"
+					bind:value={customEnd}
+					class="h-10 rounded-lg border border-border bg-surface px-3 text-sm text-text-primary transition outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-surface-elevated"
+					min={customStart}
+					max={todayIso}
+					onchange={applyCustomRange}
+				/>
+			</div>
 		</div>
 
 		{#if feedback}
 			<p
-				class="rounded-lg border border-accent/40 bg-accent/5 px-3 py-2 text-xs text-accent sm:col-span-2"
+				class="rounded-lg border border-accent/40 bg-accent/5 px-3 py-2 text-xs text-accent"
+				aria-live="polite"
 			>
 				{feedback}
 			</p>
+		{/if}
+	{:else}
+		<div
+			class="rounded-xl border border-border-muted bg-surface-inset/60 p-4 text-sm text-text-muted"
+			data-testid="custom-range-placeholder"
+		>
+			<p>Choose “Custom range” above to reveal start and end date pickers.</p>
+		</div>
+	{/if}
+
+	<div class="flex flex-wrap items-center gap-4 text-sm text-text-muted">
+		<span>
+			<span class="text-text-secondary">{rangeSummary.startLabel}</span>
+			<span class="mx-2 text-text-muted">to</span>
+			<span class="text-text-secondary">{rangeSummary.endLabel}</span>
+		</span>
+		{#if rangeSummary.dayCount}
+			<span class="rounded-full border border-border-muted px-3 py-1 text-xs tracking-wide uppercase">
+				{rangeSummary.dayCount} day{rangeSummary.dayCount === 1 ? '' : 's'}
+			</span>
 		{/if}
 	</div>
 </section>

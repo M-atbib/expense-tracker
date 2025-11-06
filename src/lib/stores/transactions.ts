@@ -30,7 +30,7 @@ const initialFilter: PeriodFilter = applyPresetToFilter(
 );
 
 const DEFAULT_SUBCATEGORIES: Record<PrimaryCategory, string[]> = {
-	income: ['Salary', 'Bonus', 'Freelance', 'Investments'],
+	income: ['Salary', 'Freelance', 'Other'],
 	fixed_expense: ['Rent/Mortgage', 'Utilities', 'Insurance', 'Subscriptions'],
 	variable_expense: ['Groceries', 'Dining', 'Transportation', 'Entertainment']
 };
